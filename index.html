@@ -158,6 +158,11 @@ tr.us td:first-child{box-shadow:inset 4px 0 0 var(--gold)}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 @keyframes flap{from{transform:scaleY(1)}to{transform:scaleY(-.55)}}
 
+/* ---------- Intro cricket ball ---------- */
+#badgeWrap .badge{z-index:1}
+.intro-ball{position:absolute;left:50%;top:46%;width:64px;height:64px;margin:-32px 0 0 -32px;z-index:0;pointer-events:none;will-change:transform,opacity}
+.intro-ball svg{display:block;width:100%;height:100%}
+
 footer{position:relative;z-index:2;text-align:center;color:var(--muted);font-size:.85rem;padding:1.5rem 1rem 2rem}
 
 @media (max-width:760px){
@@ -362,6 +367,47 @@ document.addEventListener("click", e => {
   try { history.replaceState(null, "", name === "home" ? location.pathname + location.search : "#" + name); } catch(err) {}
 });
 route();
+
+/* ---------- Intro cricket ball ---------- */
+(() => {
+  const wrap = document.getElementById("badgeWrap");
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!document.getElementById("home").classList.contains("active")) return;
+  const ball = document.createElement("div");
+  ball.className = "intro-ball";
+  ball.setAttribute("aria-hidden", "true");
+  ball.innerHTML = `<svg viewBox="0 0 100 100">
+    <defs><radialGradient id="ballShade" cx="38%" cy="32%" r="70%">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".65" stop-color="#eceae4"/><stop offset="1" stop-color="#b9b6ad"/>
+    </radialGradient></defs>
+    <circle cx="50" cy="50" r="48" fill="url(#ballShade)"/>
+    <path d="M20 12 C40 35 40 65 20 88" fill="none" stroke="#c9c5bb" stroke-width="1.4"/>
+    <path d="M27 9 C47 33 47 67 27 91" fill="none" stroke="#c9c5bb" stroke-width="1.4"/>
+    <path d="M20 12 C40 35 40 65 20 88 M27 9 C47 33 47 67 27 91" fill="none" stroke="#8f8b82" stroke-width="2.4" stroke-dasharray="1.6 3.2" transform="translate(3.5 0)"/>
+  </svg>`;
+  wrap.appendChild(ball);
+
+  const peekX = wrap.offsetWidth * 0.18, peekY = -wrap.offsetHeight * 0.48;
+
+  /* Phase 1: rise out from behind the badge */
+  ball.animate([
+    {transform:"translate(0,0) scale(.35) rotate(0deg)"},
+    {transform:`translate(${peekX}px,${peekY}px) scale(.9) rotate(-200deg)`}
+  ], {duration:650, delay:500, easing:"cubic-bezier(.2,.7,.3,1)", fill:"both"}).finished.then(() => {
+    /* Phase 2: come to the front and fly at the viewer */
+    ball.style.zIndex = 20;
+    /* Measure now, after fonts and layout have settled */
+    const r = ball.getBoundingClientRect();
+    const dx = innerWidth/2 - (r.left + r.width/2) + peekX, dy = innerHeight/2 - (r.top + r.height/2) + peekY;
+    const cover = Math.hypot(innerWidth, innerHeight) / ball.offsetWidth * 1.15;
+    const fly = ball.animate([
+      {transform:`translate(${peekX}px,${peekY}px) scale(.9) rotate(-200deg)`, opacity:1, easing:"cubic-bezier(.55,0,.9,.6)"},
+      {transform:`translate(${dx}px,${dy}px) scale(${cover}) rotate(-560deg)`, opacity:1, offset:.75, easing:"ease-out"},
+      {transform:`translate(${dx}px,${dy}px) scale(${cover*1.08}) rotate(-580deg)`, opacity:0}
+    ], {duration:1300, fill:"forwards"});
+    fly.finished.then(() => ball.remove());
+  });
+})();
 
 /* ---------- Lightning ---------- */
 (() => {
