@@ -371,7 +371,6 @@ route();
 /* ---------- Intro cricket ball ---------- */
 (() => {
   const wrap = document.getElementById("badgeWrap");
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   if (!document.getElementById("home").classList.contains("active")) return;
   const ball = document.createElement("div");
   ball.className = "intro-ball";
