@@ -49,7 +49,9 @@ main{position:relative;z-index:2}
 /* ---------- Home ---------- */
 .view{display:none;min-height:100vh;min-height:100dvh}
 .view.active{display:block}
-#home.active{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4vh 1.25rem 6vh;gap:clamp(1.25rem,3vh,2.5rem)}
+#home.active{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:1.25rem 1.25rem 6vh;gap:clamp(1.25rem,3vh,2.5rem)}
+#home .badge-wrap{margin-top:auto}
+#home .tagline{margin-bottom:auto}
 .badge-wrap{position:relative;width:min(560px,82vw,58vh);aspect-ratio:900/858}
 .badge-wrap::before{content:"";position:absolute;inset:8%;border-radius:50%;
   background:radial-gradient(circle,rgba(87,176,161,.28),transparent 65%);filter:blur(30px);
