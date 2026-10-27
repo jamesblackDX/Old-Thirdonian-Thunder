@@ -61,7 +61,7 @@ main{position:relative;z-index:2}
 .badge-wrap.lit .badge{filter:drop-shadow(0 18px 40px rgba(0,0,0,.8)) drop-shadow(0 0 24px rgba(200,220,255,.45)) brightness(1.08)}
 @keyframes rise{from{opacity:0;transform:translateY(24px) scale(.94)}to{opacity:1;transform:none}}
 
-.menu{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.9rem;width:min(980px,100%)}
+.menu{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.9rem;width:min(980px,100%);order:3}
 .menu a{
   position:relative;display:flex;align-items:center;justify-content:center;text-align:center;
   min-height:48px;padding:.6rem 1rem;
@@ -107,6 +107,12 @@ body.inner::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area
 .player:nth-child(even) .info{border-top-color:var(--gold)}
 .player h3{margin:0;font-size:1.2rem;font-weight:700}
 .player p{margin:.15rem 0 0;color:var(--muted);font-size:.9rem;text-transform:uppercase;letter-spacing:.08em}
+.player h3{font-size:1.35rem;line-height:1.1}
+.player .first{display:block;font-weight:500;font-size:.95rem;color:var(--muted)}
+.player .role{color:var(--gold);font-weight:700;font-size:.8rem;margin-top:.35rem}
+.player .styles{margin-top:.55rem;display:grid;gap:.15rem}
+.player .styles p{text-transform:none;letter-spacing:0;margin:0;font-size:.92rem}
+.player .styles b{display:inline-block;min-width:2.6rem;color:var(--teal);font-weight:700;text-transform:uppercase;font-size:.75rem;letter-spacing:.08em}
 
 /* podcasts */
 .episodes{display:grid;gap:1rem}
@@ -134,6 +140,22 @@ tr.us td:first-child{box-shadow:inset 4px 0 0 var(--gold)}
 .pill.L{background:#3a1d22;color:#ff9aa8;border-color:#5a2a33}
 .pill.D{background:#2a2a2a;color:#ddd}
 
+/* ---------- Orange bird ---------- */
+.bird{position:fixed;top:18vh;left:0;z-index:3;pointer-events:none;width:clamp(70px,9vw,120px);
+  transform:translateX(-140px);animation:fly 16s linear 2s infinite}
+.bird .bob{animation:bob 1.6s ease-in-out infinite}
+.bird .wing{transform-origin:46px 40px;animation:flap .32s ease-in-out infinite alternate}
+.bird .wing.back{animation-delay:-.16s;opacity:.85}
+@keyframes fly{
+  0%{transform:translate(-140px,0)}
+  25%{transform:translate(25vw,-4vh)}
+  50%{transform:translate(50vw,3vh)}
+  75%{transform:translate(75vw,-3vh)}
+  100%{transform:translate(calc(100vw + 140px),2vh)}
+}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+@keyframes flap{from{transform:scaleY(1)}to{transform:scaleY(-.55)}}
+
 footer{position:relative;z-index:2;text-align:center;color:var(--muted);font-size:.85rem;padding:1.5rem 1rem 2rem}
 
 @media (max-width:760px){
@@ -151,6 +173,18 @@ footer{position:relative;z-index:2;text-align:center;color:var(--muted);font-siz
 <canvas id="storm" aria-hidden="true"></canvas>
 <div id="flash" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
+<div class="bird" aria-hidden="true">
+  <svg viewBox="0 0 100 70"><g class="bob">
+    <path class="wing back" d="M46 40 C40 20 30 8 18 4 C28 18 34 30 40 42z" fill="#d9600f"/>
+    <path d="M86 34 L98 37 L86 41z" fill="#fcc125"/>
+    <path d="M20 44 L4 36 L8 46 L2 54 L22 50z" fill="#e8700f"/>
+    <ellipse cx="50" cy="44" rx="30" ry="15" fill="#f7851d"/>
+    <circle cx="76" cy="36" r="12" fill="#f7851d"/>
+    <ellipse cx="54" cy="50" rx="18" ry="7" fill="#ffb066"/>
+    <circle cx="80" cy="33" r="2.6" fill="#0a0b0d"/><circle cx="80.8" cy="32.2" r=".8" fill="#fff"/>
+    <path class="wing" d="M46 40 C44 18 36 4 24 0 C32 16 36 30 40 44z" fill="#ff9a3c"/>
+  </g></svg>
+</div>
 
 <main>
   <!-- HOME -->
@@ -182,7 +216,7 @@ footer{position:relative;z-index:2;text-align:center;color:var(--muted);font-siz
     <section id="squad" class="view page">
       <h1>Meet the <span>Squad</span></h1>
       <p class="lede">The players who make up Old Thirdonian Thunder.</p>
-      <div class="note">Placeholder profiles. Add each player’s name, shirt number, role and photo in the SQUAD list at the bottom of the page code.</div>
+      
       <div class="squad" id="squadGrid"></div>
     </section>
 
@@ -196,19 +230,18 @@ footer{position:relative;z-index:2;text-align:center;color:var(--muted);font-siz
     <section id="fixtures" class="view page">
       <h1>Fixtures &amp; <span>Results</span></h1>
       <p class="lede">Upcoming matches and how the season has gone so far.</p>
-      <div class="note">Placeholder rows. Add dates, opponents, venues and results in the FIXTURES list.</div>
       <div class="tabs" role="tablist">
-        <button role="tab" aria-selected="true" data-tab="upcoming">Upcoming</button>
-        <button role="tab" aria-selected="false" data-tab="results">Results</button>
+        <button role="tab" aria-selected="true" data-tab="results">Results</button>
+        <button role="tab" aria-selected="false" data-tab="upcoming">Upcoming</button>
       </div>
       <div class="table-scroll"><table id="fixturesTable"></table></div>
     </section>
 
     <section id="standings" class="view page">
       <h1>League <span>Standings</span></h1>
-      <p class="lede">Where the Thunder sit in the table.</p>
-      <div class="note">Placeholder table. Add each team’s record in the STANDINGS list and it will sort itself by points.</div>
+      <p class="lede">Maidstone Boundary Bash 2026</p>
       <div class="table-scroll"><table id="standingsTable"></table></div>
+      <p style="color:var(--muted);font-size:.9rem;margin-top:1rem">P played, W won, D drawn, L lost, NRR net run rate, Pts points. <a href="https://www.lastmanstands.com/lms-cricket-league/standings/5219/182" target="_blank" rel="noopener" style="color:var(--teal);font-weight:600">Full table on Last Man Stands</a></p>
     </section>
   </div>
 </main>
@@ -218,15 +251,28 @@ footer{position:relative;z-index:2;text-align:center;color:var(--muted);font-siz
 /* =========================================================
    EDIT YOUR CLUB CONTENT HERE
    ========================================================= */
+/* bat and bowl are optional: leave as "" if not known */
 const SQUAD = [
-  {num:"",name:"Player name",role:"Captain"},
-  {num:"",name:"Player name",role:"Wicketkeeper"},
-  {num:"",name:"Player name",role:"Batter"},
-  {num:"",name:"Player name",role:"Batter"},
-  {num:"",name:"Player name",role:"All-rounder"},
-  {num:"",name:"Player name",role:"All-rounder"},
-  {num:"",name:"Player name",role:"Bowler"},
-  {num:"",name:"Player name",role:"Bowler"}
+  {name:"Sam James",role:"Captain",bat:"Left-handed, accumulator",bowl:""},
+  {name:"James Black",role:"Wicketkeeper",bat:"",bowl:""},
+  {name:"Al James",role:"Mr Cricket",bat:"Right-handed, pinch hitter",bowl:"Right-arm off spin"},
+  {name:"Darren Marsh",role:"Chairman",bat:"",bowl:"Right-arm medium"},
+  {name:"Tom Moore",role:"Model",bat:"",bowl:""},
+  {name:"Brandon Glenn",role:"Hype Man",bat:"Right-handed, pinch hitter",bowl:"Right-arm medium"},
+  {name:"Alex Powell",bat:"",bowl:""},
+  {name:"Cameron Stevens",bat:"",bowl:"Right-arm medium"},
+  {name:"Tom Davies",bat:"",bowl:""},
+  {name:"Harry Egalton",bat:"",bowl:""},
+  {name:"Tim Harwood",bat:"Right-handed, accumulator",bowl:"Right-arm off spin"},
+  {name:"Matt Harwood",bat:"Right-handed, pinch hitter",bowl:"Right-arm medium"},
+  {name:"Wayne Viljoen",bat:"Right-handed, accumulator",bowl:"Right-arm medium"},
+  {name:"Alex Knight",bat:"",bowl:""},
+  {name:"Jon Knight",bat:"",bowl:""},
+  {name:"Oliver Knight",bat:"",bowl:""},
+  {name:"Phillip Black",bat:"",bowl:""},
+  {name:"Adam Marsh",bat:"",bowl:""},
+  {name:"Andy Perkins",bat:"",bowl:"Right-arm medium"},
+  {name:"Jacques Viljoen",bat:"",bowl:""}
 ];
 const PODCASTS = [
   {title:"Episode title",desc:"Short description of the episode.",date:"Date",length:"--:--",url:""},
@@ -234,16 +280,20 @@ const PODCASTS = [
   {title:"Episode title",desc:"Short description of the episode.",date:"Date",length:"--:--",url:""}
 ];
 /* result: "W", "L", "D" or "" for an upcoming match */
+/* Upcoming fixtures: date, opponent, venue, competition (leave result empty).
+   Results: date, opponent, thunder (our score), them (their score), result, summary, link. Newest first. */
 const FIXTURES = [
-  {date:"TBC",opponent:"Opponent TBC",venue:"Home",competition:"League",result:"",score:""},
-  {date:"TBC",opponent:"Opponent TBC",venue:"Away",competition:"League",result:"",score:""},
-  {date:"TBC",opponent:"Opponent TBC",venue:"Home",competition:"Cup",result:"",score:""}
+  {date:"Mon 17 Aug 2026",opponent:"TheBears",thunder:"151/2",them:"149/0",result:"W",summary:"Won by 6 wickets",link:"https://www.lastmanstands.com/lms-cricket/match-centre/scorecard/520869"},
+  {date:"Tue 11 Aug 2026",opponent:"The Umpire Strikes Back!",thunder:"139/6",them:"110/7",result:"W",summary:"Won by 29 runs",link:"https://www.lastmanstands.com/lms-cricket/match-centre/scorecard/520865"},
+  {date:"Mon 3 Aug 2026",opponent:"Kent Super Kings",thunder:"145/3",them:"144/7",result:"W",summary:"Won by 5 wickets",link:"https://www.lastmanstands.com/lms-cricket/match-centre/scorecard/520866"},
+  {date:"Wed 29 Jul 2026",opponent:"The Umpire Strikes Back!",thunder:"196/1",them:"182/4",result:"W",summary:"Won by 14 runs",link:"https://www.lastmanstands.com/lms-cricket/match-centre/scorecard/496874"}
 ];
+/* Maidstone Boundary Bash 2026. Sorted by points, then net run rate. */
 const STANDINGS = [
-  {team:"Old Thirdonian Thunder",p:0,w:0,l:0,t:0,nr:0,pts:0,us:true},
-  {team:"Team TBC",p:0,w:0,l:0,t:0,nr:0,pts:0},
-  {team:"Team TBC",p:0,w:0,l:0,t:0,nr:0,pts:0},
-  {team:"Team TBC",p:0,w:0,l:0,t:0,nr:0,pts:0}
+  {team:"Old Thirdonian Thunder",p:3,w:3,d:0,l:0,nrr:0.969,pts:26,us:true},
+  {team:"The Umpire Strikes Back!",p:3,w:1,d:1,l:1,nrr:0.398,pts:18},
+  {team:"Kent Super Kings",p:3,w:1,d:0,l:2,nrr:-0.794,pts:14},
+  {team:"TheBears",p:3,w:0,d:1,l:2,nrr:-0.813,pts:14}
 ];
 /* ========================================================= */
 
@@ -252,8 +302,8 @@ const silhouette = '<svg viewBox="0 0 100 120" fill="currentColor" style="color:
 
 document.getElementById("squadGrid").innerHTML = SQUAD.map(p=>`
   <article class="player">
-    <div class="photo">${p.photo?`<img src="${esc(p.photo)}" alt="" style="width:100%;height:100%;object-fit:cover">`:silhouette}<span class="num">${esc(p.num||"#")}</span></div>
-    <div class="info"><h3>${esc(p.name)}</h3><p>${esc(p.role)}</p></div>
+    <div class="photo">${p.photo?`<img src="${esc(p.photo)}" alt="" style="width:100%;height:100%;object-fit:cover">`:silhouette}${p.num?`<span class="num">${esc(p.num)}</span>`:""}</div>
+    <div class="info"><h3><span class="first">${esc(p.name.split(" ").slice(0,-1).join(" "))}</span>${esc(p.name.split(" ").slice(-1)[0])}</h3>${p.role?`<p class="role">${esc(p.role)}</p>`:""}</div>
   </article>`).join("");
 
 const playIcon = '<svg viewBox="0 0 20 22"><path d="M0 0l20 11L0 22z" fill="#0a0b0d"/></svg>';
@@ -267,29 +317,30 @@ document.getElementById("episodeList").innerHTML = PODCASTS.map((e,i)=>`
 function renderFixtures(tab){
   const rows = FIXTURES.filter(f => tab==="results" ? f.result : !f.result);
   const head = tab==="results"
-    ? "<tr><th>Date</th><th>Opponent</th><th>Venue</th><th>Competition</th><th>Score</th><th class='num'>Result</th></tr>"
+    ? "<tr><th>Date</th><th>Opponent</th><th class='num'>Thunder</th><th class='num'>Opponent</th><th class='num'>Result</th><th>Summary</th><th></th></tr>"
     : "<tr><th>Date</th><th>Opponent</th><th>Venue</th><th>Competition</th></tr>";
   const body = rows.length ? rows.map(f => tab==="results"
-    ? `<tr><td>${esc(f.date)}</td><td>${esc(f.opponent)}</td><td>${esc(f.venue)}</td><td>${esc(f.competition)}</td><td>${esc(f.score)}</td><td class="num"><span class="pill ${esc(f.result)}">${esc(f.result)}</span></td></tr>`
+    ? `<tr><td>${esc(f.date)}</td><td>${esc(f.opponent)}</td><td class="num"><strong>${esc(f.thunder||"")}</strong></td><td class="num">${esc(f.them||"")}</td><td class="num"><span class="pill ${esc(f.result)}">${esc(f.result)}</span></td><td>${esc(f.summary||"")}</td><td>${f.link?`<a href="${esc(f.link)}" target="_blank" rel="noopener" style="color:var(--teal);font-weight:600">Scorecard</a>`:""}</td></tr>`
     : `<tr><td>${esc(f.date)}</td><td>${esc(f.opponent)}</td><td>${esc(f.venue)}</td><td>${esc(f.competition)}</td></tr>`).join("")
-    : `<tr><td colspan="6" style="color:var(--muted)">${tab==="results"?"No results yet.":"No upcoming fixtures."}</td></tr>`;
+    : `<tr><td colspan="7" style="color:var(--muted)">${tab==="results"?"No results yet.":"No upcoming fixtures."}</td></tr>`;
   document.getElementById("fixturesTable").innerHTML = `<thead>${head}</thead><tbody>${body}</tbody>`;
 }
 document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>{
   document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));
   renderFixtures(b.dataset.tab);
 }));
-renderFixtures("upcoming");
+renderFixtures("results");
 
-const st = [...STANDINGS].sort((a,b)=>b.pts-a.pts || b.w-a.w);
+const st = [...STANDINGS].sort((a,b)=>b.pts-a.pts || b.nrr-a.nrr);
+const fmtNrr = n => (n>0?"+":"") + n.toFixed(3);
 document.getElementById("standingsTable").innerHTML =
-  `<thead><tr><th class="num">Pos</th><th>Team</th><th class="num">P</th><th class="num">W</th><th class="num">L</th><th class="num">T</th><th class="num">NR</th><th class="num">Pts</th></tr></thead><tbody>` +
-  st.map((t,i)=>`<tr class="${t.us?"us":""}"><td class="num">${i+1}</td><td><strong>${esc(t.team)}</strong></td><td class="num">${t.p}</td><td class="num">${t.w}</td><td class="num">${t.l}</td><td class="num">${t.t}</td><td class="num">${t.nr}</td><td class="num"><strong>${t.pts}</strong></td></tr>`).join("") + "</tbody>";
+  `<thead><tr><th class="num">Pos</th><th>Team</th><th class="num">P</th><th class="num">W</th><th class="num">D</th><th class="num">L</th><th class="num">NRR</th><th class="num">Pts</th></tr></thead><tbody>` +
+  st.map((t,i)=>`<tr class="${t.us?"us":""}"><td class="num">${i+1}</td><td><strong>${esc(t.team)}</strong></td><td class="num">${t.p}</td><td class="num">${t.w}</td><td class="num">${t.d}</td><td class="num">${t.l}</td><td class="num">${fmtNrr(t.nrr)}</td><td class="num"><strong>${t.pts}</strong></td></tr>`).join("") + "</tbody>";
 
 /* ---------- Routing ---------- */
 const pages = ["squad","podcasts","fixtures","standings"];
-function route(){
-  const h = (location.hash||"").replace("#","");
+function route(name){
+  const h = typeof name === "string" ? name : (location.hash||"").replace("#","");
   const target = pages.includes(h) ? h : "home";
   document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active", v.id===target));
   document.getElementById("inner").style.display = target==="home" ? "none" : "block";
@@ -298,7 +349,16 @@ function route(){
   document.querySelectorAll(".topbar nav a[aria-current]").forEach(a=>a.setAttribute("aria-current","page"));
   window.scrollTo(0,0);
 }
-window.addEventListener("hashchange", route);
+window.addEventListener("hashchange", () => route());
+/* Handle page links directly, so they work inside preview panels and embedded viewers */
+document.addEventListener("click", e => {
+  const a = e.target.closest('a[href^="#"]');
+  if(!a) return;
+  e.preventDefault();
+  const name = a.getAttribute("href").slice(1);
+  route(name);
+  try { history.replaceState(null, "", name === "home" ? location.pathname + location.search : "#" + name); } catch(err) {}
+});
 route();
 
 /* ---------- Lightning ---------- */
