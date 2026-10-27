@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Old Thirdonian Thunder</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Graduate&family=Barlow+Semi+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: dark;
+  --bg:#050507;
+  --panel:#101116;
+  --panel-edge:#23252e;
+  --text:#f1f2f4;
+  --muted:#9aa0ab;
+  --teal:#57b0a1;
+  --teal-deep:#3f8f7b;
+  --gold:#fcc125;
+  --gold-deep:#d99d0c;
+  --display:"Graduate","Rockwell","Georgia",serif;
+  --body:"Barlow Semi Condensed","Arial Narrow","Helvetica Neue",Arial,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#050507; } }
+:root[data-theme="dark"]{ --bg:#050507; }
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--bg)}
+html,body{margin:0;min-height:100%}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--body);
+  font-size:1.05rem;
+  line-height:1.5;
+  overflow-x:hidden;
+}
+#storm{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#flash{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;
+  background:radial-gradient(ellipse at var(--fx,50%) 0%, rgba(190,215,255,.35), rgba(120,150,220,.08) 45%, transparent 75%);}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.06;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");}
+main{position:relative;z-index:2}
+
+/* ---------- Home ---------- */
+.view{display:none;min-height:100vh;min-height:100dvh}
+.view.active{display:block}
+#home.active{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4vh 1.25rem 6vh;gap:clamp(1.25rem,3vh,2.5rem)}
+.badge-wrap{position:relative;width:min(560px,82vw,58vh);aspect-ratio:900/858}
+.badge-wrap::before{content:"";position:absolute;inset:8%;border-radius:50%;
+  background:radial-gradient(circle,rgba(87,176,161,.28),transparent 65%);filter:blur(30px);
+  transition:opacity .15s;opacity:.6}
+.badge-wrap.lit::before{opacity:1}
+.badge{position:relative;width:100%;height:100%;object-fit:contain;display:block;
+  filter:drop-shadow(0 18px 40px rgba(0,0,0,.8));
+  animation:rise 1s cubic-bezier(.2,.8,.2,1) both}
+.badge-wrap.lit .badge{filter:drop-shadow(0 18px 40px rgba(0,0,0,.8)) drop-shadow(0 0 24px rgba(200,220,255,.45)) brightness(1.08)}
+@keyframes rise{from{opacity:0;transform:translateY(24px) scale(.94)}to{opacity:1;transform:none}}
+
+.menu{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.9rem;width:min(980px,100%)}
+.menu a{
+  position:relative;display:flex;align-items:center;justify-content:center;text-align:center;
+  min-height:48px;padding:.6rem 1rem;
+  font-family:var(--body);font-weight:700;font-size:clamp(1.1rem,1.8vw,1.35rem);letter-spacing:.02em;
+  color:#fff;background:none;
+  text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px;
+  transition:opacity .15s;
+  animation:rise .7s cubic-bezier(.2,.8,.2,1) both;
+}
+.menu a:nth-child(1){animation-delay:.35s}.menu a:nth-child(2){animation-delay:.45s}
+.menu a:nth-child(3){animation-delay:.55s}.menu a:nth-child(4){animation-delay:.65s}
+.menu a:hover{opacity:.75}
+.menu a:focus-visible{outline:2px solid #fff;outline-offset:4px;border-radius:4px}
+.tagline{font-family:var(--display);color:var(--muted);letter-spacing:.3em;font-size:.8rem;text-transform:uppercase;margin:0;animation:rise .7s .8s both}
+
+/* ---------- Inner pages ---------- */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;
+  display:flex;align-items:center;gap:1rem;padding:.7rem clamp(1rem,4vw,2.5rem);
+  background:rgba(5,5,7,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--panel-edge)}
+body.inner::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;
+  background:rgba(5,5,7,.82);backdrop-filter:blur(10px)}
+.topbar .mini{width:46px;height:46px;object-fit:contain}
+.topbar a.home{display:flex;align-items:center;gap:.7rem;text-decoration:none;color:var(--text);font-family:var(--display);font-size:.95rem;letter-spacing:.04em}
+.topbar nav{margin-left:auto;display:flex;gap:.3rem;flex-wrap:wrap;justify-content:flex-end}
+.topbar nav a{color:var(--muted);text-decoration:none;font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:.85rem;padding:.4rem .65rem;border-radius:6px}
+.topbar nav a:hover{color:var(--text)}
+.topbar nav a[aria-current="page"]{color:#0a0b0d;background:var(--gold)}
+.page{width:min(1100px,100%);margin:0 auto;padding:clamp(1.5rem,5vw,3.5rem) clamp(1rem,4vw,2.5rem) 5rem}
+.page h1{font-family:var(--body);font-weight:700;font-size:clamp(2rem,6vw,3.6rem);line-height:1.05;margin:0 0 .5rem;color:#fff}
+.page h1 span{color:inherit}
+.lede{color:var(--muted);margin:0 0 2rem;max-width:60ch}
+.note{border:1px dashed var(--panel-edge);border-radius:10px;padding:.8rem 1rem;color:var(--muted);font-size:.95rem;margin-bottom:1.5rem;background:rgba(16,17,22,.6)}
+
+/* squad */
+.squad{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
+.player{background:linear-gradient(180deg,var(--panel),#0a0b0f);border:1px solid var(--panel-edge);border-radius:14px;overflow:hidden;position:relative}
+.player .photo{aspect-ratio:4/5;display:grid;place-items:center;background:
+  radial-gradient(circle at 50% 35%,rgba(87,176,161,.18),transparent 60%),#0c0d11;position:relative}
+.player .photo svg{width:46%;opacity:.35}
+.player .num{position:absolute;top:.6rem;left:.75rem;font-family:var(--display);font-size:2rem;color:var(--gold);-webkit-text-stroke:1.5px #000;paint-order:stroke fill}
+.player .info{padding:.8rem 1rem 1rem;border-top:3px solid var(--teal)}
+.player:nth-child(even) .info{border-top-color:var(--gold)}
+.player h3{margin:0;font-size:1.2rem;font-weight:700}
+.player p{margin:.15rem 0 0;color:var(--muted);font-size:.9rem;text-transform:uppercase;letter-spacing:.08em}
+
+/* podcasts */
+.episodes{display:grid;gap:1rem}
+.ep{display:grid;grid-template-columns:auto 1fr auto;gap:1.1rem;align-items:center;background:var(--panel);border:1px solid var(--panel-edge);border-radius:14px;padding:1rem 1.2rem}
+.ep .play{width:54px;height:54px;border-radius:50%;border:3px solid #000;background:var(--gold);display:grid;place-items:center;box-shadow:0 0 0 2px var(--gold);cursor:not-allowed;opacity:.85}
+.ep .play svg{width:20px;margin-left:3px}
+.ep h3{margin:0;font-size:1.15rem}
+.ep p{margin:.15rem 0 0;color:var(--muted);font-size:.92rem}
+.ep .len{font-family:var(--display);color:var(--teal);font-size:.9rem}
+
+/* tables */
+.tabs{display:flex;gap:.5rem;margin-bottom:1rem}
+.tabs button{font:inherit;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:.85rem;padding:.5rem 1rem;border-radius:8px;border:1px solid var(--panel-edge);background:var(--panel);color:var(--muted);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--teal);color:#0a0b0d;border-color:var(--teal)}
+.table-scroll{overflow-x:auto;border:1px solid var(--panel-edge);border-radius:14px;background:var(--panel)}
+table{width:100%;border-collapse:collapse;min-width:620px}
+th,td{padding:.8rem 1rem;text-align:left;border-bottom:1px solid var(--panel-edge);white-space:nowrap}
+th{font-family:var(--display);font-weight:400;font-size:.8rem;letter-spacing:.08em;color:var(--teal);background:#0b0c10;text-transform:uppercase}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:center}
+tr.us td{background:rgba(252,193,37,.08)}
+tr.us td:first-child{box-shadow:inset 4px 0 0 var(--gold)}
+.pill{display:inline-block;padding:.15rem .55rem;border-radius:999px;font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--panel-edge);color:var(--muted)}
+.pill.W{background:var(--teal);color:#0a0b0d;border-color:var(--teal)}
+.pill.L{background:#3a1d22;color:#ff9aa8;border-color:#5a2a33}
+.pill.D{background:#2a2a2a;color:#ddd}
+
+footer{position:relative;z-index:2;text-align:center;color:var(--muted);font-size:.85rem;padding:1.5rem 1rem 2rem}
+
+@media (max-width:760px){
+  .menu{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .topbar nav{display:none}
+  .ep{grid-template-columns:auto 1fr}
+  .ep .len{grid-column:2}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<canvas id="storm" aria-hidden="true"></canvas>
+<div id="flash" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<main>
+  <!-- HOME -->
+  <section id="home" class="view" aria-label="Home">
+    <nav class="menu" aria-label="Main">
+      <a href="#squad">Meet the Squad</a>
+      <a href="#podcasts">Podcasts</a>
+      <a href="#fixtures">Fixtures &amp; Results</a>
+      <a href="#standings">Standings</a>
+    </nav>
+    <div class="badge-wrap" id="badgeWrap">
+      <img class="badge" src="logo.png" alt="Old Thirdonian Thunder club badge">
+    </div>
+    <p class="tagline">Old Thirdonian Thunder Cricket Club</p>
+  </section>
+
+  <!-- INNER PAGES share a header -->
+  <div id="inner" style="display:none">
+    <header class="topbar">
+      <a class="home" href="#home"><img class="mini" src="logo.png" alt=""><span>OT Thunder</span></a>
+      <nav aria-label="Sections">
+        <a href="#squad">Squad</a>
+        <a href="#podcasts">Podcasts</a>
+        <a href="#fixtures">Fixtures</a>
+        <a href="#standings">Standings</a>
+      </nav>
+    </header>
+
+    <section id="squad" class="view page">
+      <h1>Meet the <span>Squad</span></h1>
+      <p class="lede">The players who make up Old Thirdonian Thunder.</p>
+      <div class="note">Placeholder profiles. Add each player’s name, shirt number, role and photo in the SQUAD list at the bottom of the page code.</div>
+      <div class="squad" id="squadGrid"></div>
+    </section>
+
+    <section id="podcasts" class="view page">
+      <h1>The Thunder <span>Podcast</span></h1>
+      <p class="lede">Match reviews, dressing room chat and the stories behind the season.</p>
+      <div class="note">Placeholder episodes. Add episode titles, dates and a link to each episode in the PODCASTS list.</div>
+      <div class="episodes" id="episodeList"></div>
+    </section>
+
+    <section id="fixtures" class="view page">
+      <h1>Fixtures &amp; <span>Results</span></h1>
+      <p class="lede">Upcoming matches and how the season has gone so far.</p>
+      <div class="note">Placeholder rows. Add dates, opponents, venues and results in the FIXTURES list.</div>
+      <div class="tabs" role="tablist">
+        <button role="tab" aria-selected="true" data-tab="upcoming">Upcoming</button>
+        <button role="tab" aria-selected="false" data-tab="results">Results</button>
+      </div>
+      <div class="table-scroll"><table id="fixturesTable"></table></div>
+    </section>
+
+    <section id="standings" class="view page">
+      <h1>League <span>Standings</span></h1>
+      <p class="lede">Where the Thunder sit in the table.</p>
+      <div class="note">Placeholder table. Add each team’s record in the STANDINGS list and it will sort itself by points.</div>
+      <div class="table-scroll"><table id="standingsTable"></table></div>
+    </section>
+  </div>
+</main>
+<footer>© Old Thirdonian Thunder Cricket Club</footer>
+
+<script>
+/* =========================================================
+   EDIT YOUR CLUB CONTENT HERE
+   ========================================================= */
+const SQUAD = [
+  {num:"",name:"Player name",role:"Captain"},
+  {num:"",name:"Player name",role:"Wicketkeeper"},
+  {num:"",name:"Player name",role:"Batter"},
+  {num:"",name:"Player name",role:"Batter"},
+  {num:"",name:"Player name",role:"All-rounder"},
+  {num:"",name:"Player name",role:"All-rounder"},
+  {num:"",name:"Player name",role:"Bowler"},
+  {num:"",name:"Player name",role:"Bowler"}
+];
+const PODCASTS = [
+  {title:"Episode title",desc:"Short description of the episode.",date:"Date",length:"--:--",url:""},
+  {title:"Episode title",desc:"Short description of the episode.",date:"Date",length:"--:--",url:""},
+  {title:"Episode title",desc:"Short description of the episode.",date:"Date",length:"--:--",url:""}
+];
+/* result: "W", "L", "D" or "" for an upcoming match */
+const FIXTURES = [
+  {date:"TBC",opponent:"Opponent TBC",venue:"Home",competition:"League",result:"",score:""},
+  {date:"TBC",opponent:"Opponent TBC",venue:"Away",competition:"League",result:"",score:""},
+  {date:"TBC",opponent:"Opponent TBC",venue:"Home",competition:"Cup",result:"",score:""}
+];
+const STANDINGS = [
+  {team:"Old Thirdonian Thunder",p:0,w:0,l:0,t:0,nr:0,pts:0,us:true},
+  {team:"Team TBC",p:0,w:0,l:0,t:0,nr:0,pts:0},
+  {team:"Team TBC",p:0,w:0,l:0,t:0,nr:0,pts:0},
+  {team:"Team TBC",p:0,w:0,l:0,t:0,nr:0,pts:0}
+];
+/* ========================================================= */
+
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const silhouette = '<svg viewBox="0 0 100 120" fill="currentColor" style="color:#57b0a1"><circle cx="50" cy="34" r="22"/><path d="M8 120c0-26 19-44 42-44s42 18 42 44z"/></svg>';
+
+document.getElementById("squadGrid").innerHTML = SQUAD.map(p=>`
+  <article class="player">
+    <div class="photo">${p.photo?`<img src="${esc(p.photo)}" alt="" style="width:100%;height:100%;object-fit:cover">`:silhouette}<span class="num">${esc(p.num||"#")}</span></div>
+    <div class="info"><h3>${esc(p.name)}</h3><p>${esc(p.role)}</p></div>
+  </article>`).join("");
+
+const playIcon = '<svg viewBox="0 0 20 22"><path d="M0 0l20 11L0 22z" fill="#0a0b0d"/></svg>';
+document.getElementById("episodeList").innerHTML = PODCASTS.map((e,i)=>`
+  <article class="ep">
+    ${e.url?`<a class="play" style="cursor:pointer;opacity:1" href="${esc(e.url)}" target="_blank" rel="noopener" aria-label="Play ${esc(e.title)}">${playIcon}</a>`:`<span class="play" aria-hidden="true">${playIcon}</span>`}
+    <div><h3>${esc(e.title)}</h3><p>${esc(e.date)} · ${esc(e.desc)}</p></div>
+    <span class="len">${esc(e.length)}</span>
+  </article>`).join("");
+
+function renderFixtures(tab){
+  const rows = FIXTURES.filter(f => tab==="results" ? f.result : !f.result);
+  const head = tab==="results"
+    ? "<tr><th>Date</th><th>Opponent</th><th>Venue</th><th>Competition</th><th>Score</th><th class='num'>Result</th></tr>"
+    : "<tr><th>Date</th><th>Opponent</th><th>Venue</th><th>Competition</th></tr>";
+  const body = rows.length ? rows.map(f => tab==="results"
+    ? `<tr><td>${esc(f.date)}</td><td>${esc(f.opponent)}</td><td>${esc(f.venue)}</td><td>${esc(f.competition)}</td><td>${esc(f.score)}</td><td class="num"><span class="pill ${esc(f.result)}">${esc(f.result)}</span></td></tr>`
+    : `<tr><td>${esc(f.date)}</td><td>${esc(f.opponent)}</td><td>${esc(f.venue)}</td><td>${esc(f.competition)}</td></tr>`).join("")
+    : `<tr><td colspan="6" style="color:var(--muted)">${tab==="results"?"No results yet.":"No upcoming fixtures."}</td></tr>`;
+  document.getElementById("fixturesTable").innerHTML = `<thead>${head}</thead><tbody>${body}</tbody>`;
+}
+document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));
+  renderFixtures(b.dataset.tab);
+}));
+renderFixtures("upcoming");
+
+const st = [...STANDINGS].sort((a,b)=>b.pts-a.pts || b.w-a.w);
+document.getElementById("standingsTable").innerHTML =
+  `<thead><tr><th class="num">Pos</th><th>Team</th><th class="num">P</th><th class="num">W</th><th class="num">L</th><th class="num">T</th><th class="num">NR</th><th class="num">Pts</th></tr></thead><tbody>` +
+  st.map((t,i)=>`<tr class="${t.us?"us":""}"><td class="num">${i+1}</td><td><strong>${esc(t.team)}</strong></td><td class="num">${t.p}</td><td class="num">${t.w}</td><td class="num">${t.l}</td><td class="num">${t.t}</td><td class="num">${t.nr}</td><td class="num"><strong>${t.pts}</strong></td></tr>`).join("") + "</tbody>";
+
+/* ---------- Routing ---------- */
+const pages = ["squad","podcasts","fixtures","standings"];
+function route(){
+  const h = (location.hash||"").replace("#","");
+  const target = pages.includes(h) ? h : "home";
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active", v.id===target));
+  document.getElementById("inner").style.display = target==="home" ? "none" : "block";
+  document.body.classList.toggle("inner", target!=="home");
+  document.querySelectorAll(".topbar nav a").forEach(a=>a.toggleAttribute("aria-current", a.getAttribute("href")==="#"+target));
+  document.querySelectorAll(".topbar nav a[aria-current]").forEach(a=>a.setAttribute("aria-current","page"));
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange", route);
+route();
+
+/* ---------- Lightning ---------- */
+(() => {
+  const cv = document.getElementById("storm"), ctx = cv.getContext("2d");
+  const flash = document.getElementById("flash"), badge = document.getElementById("badgeWrap");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let W, H, dpr, bolts = [];
+  function size(){ dpr = Math.min(devicePixelRatio||1,2); W = innerWidth; H = innerHeight; cv.width = W*dpr; cv.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+  addEventListener("resize", size); size();
+
+  function makeBolt(x, y, angle, len, width, depth){
+    const segs = []; let cx = x, cy = y;
+    const steps = Math.max(6, Math.floor(len/18));
+    for(let i=0;i<steps;i++){
+      const a = angle + (Math.random()-.5)*1.1;
+      const l = len/steps * (0.6+Math.random()*0.8);
+      const nx = cx + Math.cos(a)*l, ny = cy + Math.sin(a)*l;
+      segs.push([cx,cy,nx,ny,width*(1-i/steps*0.7)]);
+      if(depth<3 && Math.random()<0.16){
+        segs.push(...makeBolt(nx,ny,angle+(Math.random()<.5?-1:1)*(0.4+Math.random()*0.6), len*(0.25+Math.random()*0.3), width*0.5, depth+1));
+      }
+      cx = nx; cy = ny;
+    }
+    return segs;
+  }
+  function strike(){
+    const x = W*(0.05+Math.random()*0.9);
+    const len = H*(0.45+Math.random()*0.6);
+    bolts.push({segs: makeBolt(x, -10, Math.PI/2 + (Math.random()-.5)*0.5, len, 2.6+Math.random()*1.6, 0), born: performance.now(), life: 650});
+    flash.style.setProperty("--fx", (x/W*100)+"%");
+    flash.animate([{opacity:0},{opacity:1,offset:.08},{opacity:.2,offset:.2},{opacity:.85,offset:.3},{opacity:0}],{duration:700,easing:"ease-out"});
+    if(badge){ badge.classList.add("lit"); setTimeout(()=>badge.classList.remove("lit"),260); }
+  }
+  function draw(now){
+    ctx.clearRect(0,0,W,H);
+    bolts = bolts.filter(b => now - b.born < b.life);
+    for(const b of bolts){
+      const t = (now-b.born)/b.life;
+      const flick = t<0.15 ? 1 : t<0.25 ? 0.35 : t<0.35 ? 0.95 : 1-t;
+      ctx.lineCap = "round";
+      for(const pass of [{w:5,c:`rgba(140,170,255,${0.35*flick})`,blur:24},{w:1,c:`rgba(255,255,255,${flick})`,blur:8}]){
+        ctx.shadowColor = "rgba(170,195,255,.9)"; ctx.shadowBlur = pass.blur; ctx.strokeStyle = pass.c;
+        for(const s of b.segs){ ctx.lineWidth = s[4]*pass.w*0.5; ctx.beginPath(); ctx.moveTo(s[0],s[1]); ctx.lineTo(s[2],s[3]); ctx.stroke(); }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+  function loop(){
+    strike();
+    if(Math.random()<0.35) setTimeout(strike, 120+Math.random()*250);
+    setTimeout(loop, (reduce ? 9000 : 1800) + Math.random()*(reduce ? 6000 : 3800));
+  }
+  setTimeout(loop, 900);
+})();
+</script>
+</body>
+</html>
