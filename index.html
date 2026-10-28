@@ -143,10 +143,21 @@ tr.us td:first-child{box-shadow:inset 4px 0 0 var(--gold)}
 .pill.D{background:#2a2a2a;color:#ddd}
 
 
-/* ---------- Intro cricket ball ---------- */
-#badgeWrap .badge{z-index:1}
-.intro-ball{position:absolute;left:50%;top:46%;width:64px;height:64px;margin:-32px 0 0 -32px;z-index:0;pointer-events:none;will-change:transform,opacity}
-.intro-ball svg{display:block;width:100%;height:100%}
+/* ---------- Opening intro: bat, ball and breaking glass ---------- */
+html.intro{overflow:hidden}
+html.intro-hold #home *{animation-play-state:paused}
+#intro{display:none;position:fixed;inset:0;z-index:50;overflow:hidden;cursor:pointer;background:var(--bg)}
+html.intro #intro{display:block}
+#intro .stage,#intro .glass{position:absolute;inset:0}
+#intro .bat,#intro .ball,#intro .burst{position:absolute;left:0;top:0;pointer-events:none;will-change:transform,opacity}
+#intro .bat svg,#intro .ball svg{display:block;width:100%;height:100%}
+#intro .bat{transform-origin:50% 0;opacity:0}
+#intro .burst{border:2px solid rgba(255,255,255,.85);border-radius:50%;opacity:0}
+#intro .glass{display:block;width:100%;height:100%;visibility:hidden}
+#intro .shard{transform-box:fill-box;transform-origin:center}
+#intro .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+#intro .skip{position:absolute;left:0;right:0;bottom:calc(1.25rem + env(safe-area-inset-bottom,0px));margin:0;text-align:center;
+  color:var(--muted);font-size:.8rem;letter-spacing:.2em;text-transform:uppercase}
 
 footer{position:relative;z-index:2;text-align:center;color:var(--muted);font-size:.85rem;padding:1.5rem 1rem 2rem}
 
@@ -160,8 +171,17 @@ footer{position:relative;z-index:2;text-align:center;color:var(--muted);font-siz
   *{animation:none!important;transition:none!important}
 }
 </style>
+<script>
+/* Show the opening intro only when the site opens on the homepage */
+if (!/^#(squad|podcasts|fixtures|standings)$/.test(location.hash)) {
+  document.documentElement.classList.add("intro", "intro-hold");
+  /* Safety net: never leave the intro covering the page */
+  setTimeout(function(){ var d = document.documentElement, i = document.getElementById("intro"); d.classList.remove("intro", "intro-hold"); if (i) i.remove(); }, 9000);
+}
+</script>
 </head>
 <body>
+<div id="intro" aria-hidden="true"></div>
 <canvas id="storm" aria-hidden="true"></canvas>
 <div id="flash" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
@@ -341,43 +361,217 @@ document.addEventListener("click", e => {
 });
 route();
 
-/* ---------- Intro cricket ball ---------- */
+/* ---------- Opening intro: bat hits ball, screen cracks, glass falls ---------- */
 (() => {
-  const wrap = document.getElementById("badgeWrap");
-  if (!document.getElementById("home").classList.contains("active")) return;
-  const ball = document.createElement("div");
-  ball.className = "intro-ball";
-  ball.setAttribute("aria-hidden", "true");
-  ball.innerHTML = `<svg viewBox="0 0 100 100">
-    <defs><radialGradient id="ballShade" cx="38%" cy="32%" r="70%">
-      <stop offset="0" stop-color="#ffffff"/><stop offset=".65" stop-color="#eceae4"/><stop offset="1" stop-color="#b9b6ad"/>
-    </radialGradient></defs>
-    <circle cx="50" cy="50" r="48" fill="url(#ballShade)"/>
-    <path d="M20 12 C40 35 40 65 20 88" fill="none" stroke="#c9c5bb" stroke-width="1.4"/>
-    <path d="M27 9 C47 33 47 67 27 91" fill="none" stroke="#c9c5bb" stroke-width="1.4"/>
-    <path d="M20 12 C40 35 40 65 20 88 M27 9 C47 33 47 67 27 91" fill="none" stroke="#8f8b82" stroke-width="2.4" stroke-dasharray="1.6 3.2" transform="translate(3.5 0)"/>
+  const root = document.documentElement, intro = document.getElementById("intro");
+  if (!intro) return;
+  if (!root.classList.contains("intro")) { intro.remove(); return; }
+
+  const W = innerWidth, H = innerHeight, S = Math.min(W, H), R = Math.hypot(W, H) * 0.75;
+  const NS = "http://www.w3.org/2000/svg";
+  const rand = (a, b) => a + Math.random() * (b - a);
+  let finished = false;
+  const timers = [];
+  const at = (ms, fn) => timers.push(setTimeout(() => { if (!finished) fn(); }, ms));
+  function end(){
+    if (finished) return;
+    finished = true;
+    timers.forEach(clearTimeout);
+    root.classList.remove("intro", "intro-hold");
+    intro.remove();
+  }
+  function skip(){
+    if (finished) return;
+    root.classList.remove("intro-hold");
+    intro.style.pointerEvents = "none";
+    intro.animate([{opacity:1},{opacity:0}], {duration:250, fill:"forwards"}).finished.then(end);
+  }
+  intro.addEventListener("click", skip);
+  addEventListener("keydown", skip, {once:true});
+
+  /* Matching backgrounds, so the glass looks like the screen itself */
+  intro.style.background = `radial-gradient(circle ${R}px at 50% 50%, #0e1a19, #050507)`;
+
+  const BAT = `<svg viewBox="0 0 60 320" aria-hidden="true">
+    <defs>
+      <linearGradient id="introWillow" x1="0" x2="1">
+        <stop offset="0" stop-color="#c4a165"/><stop offset=".2" stop-color="#ead39f"/><stop offset=".55" stop-color="#f5e4bb"/>
+        <stop offset=".85" stop-color="#e0c389"/><stop offset="1" stop-color="#b38f55"/>
+      </linearGradient>
+      <linearGradient id="introGrip" x1="0" x2="1">
+        <stop offset="0" stop-color="#2b7366"/><stop offset=".5" stop-color="#57b0a1"/><stop offset="1" stop-color="#2b7366"/>
+      </linearGradient>
+    </defs>
+    <rect x="24" y="0" width="12" height="120" rx="5" fill="url(#introGrip)"/>
+    <path d="M24 14H36M24 28H36M24 42H36M24 56H36M24 70H36M24 84H36M24 98H36" stroke="rgba(0,0,0,.28)" stroke-width="1.6"/>
+    <path d="M24 112H36Q38 126 56 132V300Q56 316 30 317Q4 316 4 300V132Q22 126 24 112Z" fill="url(#introWillow)" stroke="#9a7743" stroke-width=".8"/>
+    <path d="M14 140V306M22 136V312M38 136V312M46 140V306" stroke="rgba(150,110,50,.22)" stroke-width=".7"/>
+    <rect x="10" y="150" width="40" height="88" rx="3" fill="#0b0c10"/>
+    <rect x="10" y="150" width="40" height="6" rx="2" fill="#fcc125"/>
+    <rect x="10" y="232" width="40" height="6" rx="2" fill="#57b0a1"/>
+    <text x="30" y="194" transform="rotate(-90 30 194)" text-anchor="middle" dominant-baseline="central"
+      font-family="Graduate, Georgia, serif" font-size="12" fill="#fcc125">THUNDER</text>
+    <rect x="4" y="284" width="52" height="4" fill="#fcc125"/>
   </svg>`;
-  wrap.appendChild(ball);
 
-  const peekX = wrap.offsetWidth * 0.18, peekY = -wrap.offsetHeight * 0.48;
+  /* White cricket ball: a straight raised seam with stitching either side */
+  const BALL = `<svg viewBox="0 0 100 100" aria-hidden="true">
+    <defs>
+      <radialGradient id="introBallShade" cx="36%" cy="30%" r="75%">
+        <stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#eeece6"/><stop offset="1" stop-color="#aaa69c"/>
+      </radialGradient>
+      <clipPath id="introBallClip"><circle cx="50" cy="50" r="48"/></clipPath>
+    </defs>
+    <circle cx="50" cy="50" r="48" fill="url(#introBallShade)"/>
+    <g clip-path="url(#introBallClip)" fill="none">
+      <path d="M0 45Q50 66 100 45M0 53Q50 74 100 53" stroke="#b5b0a4" stroke-width="1.8"/>
+      <path d="M0 39Q50 60 100 39M0 59Q50 80 100 59" stroke="#8a857a" stroke-width="3.2" stroke-dasharray="1.6 3"/>
+    </g>
+  </svg>`;
 
-  /* Phase 1: rise out from behind the badge */
+  intro.innerHTML = `<div class="stage"><div class="bat">${BAT}</div><div class="ball">${BALL}</div><div class="burst"></div></div>
+    <svg class="glass" xmlns="${NS}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+      <defs><radialGradient id="introGlassBg" gradientUnits="userSpaceOnUse" cx="${W/2}" cy="${H/2}" r="${R}">
+        <stop offset="0" stop-color="#0e1a19"/><stop offset="1" stop-color="#050507"/>
+      </radialGradient></defs>
+    </svg>
+    <div class="flash"></div>
+    <p class="skip">Tap to skip</p>`;
+  const stage = intro.querySelector(".stage"), bat = intro.querySelector(".bat"), ball = intro.querySelector(".ball");
+  const burst = intro.querySelector(".burst"), glass = intro.querySelector(".glass"), flash = intro.querySelector(".flash");
+
+  /* ----- Layout: bat swings from a pivot at the top of the handle ----- */
+  const L = 0.62 * S, bw = L * 60 / 320, d = 0.06 * S;
+  const pivot = {x: W/2 - 0.22*S, y: H/2 - 0.25*S};
+  /* Contact point: the sweet spot of the blade when it is 20 degrees past vertical, just off its face */
+  const hit = 20 * Math.PI / 180, face = 0.05*S + d/2;
+  const contact = {x: pivot.x + 0.75*L*Math.sin(hit) + face*Math.cos(hit), y: pivot.y + 0.75*L*Math.cos(hit) - face*Math.sin(hit)};
+  const impact = {x: W * 0.52, y: H * 0.45};
+  Object.assign(bat.style, {width: bw+"px", height: L+"px", left: (pivot.x - bw/2)+"px", top: pivot.y+"px"});
+  Object.assign(ball.style, {width: d+"px", height: d+"px"});
+  const place = (p, scale, rot) => `translate(${p.x - d/2}px,${p.y - d/2}px) scale(${scale}) rotate(${rot}deg)`;
+
+  /* ----- 1. Backlift, swing and follow-through ----- */
+  bat.animate([
+    {transform:"rotate(115deg)", opacity:0},
+    {transform:"rotate(118deg)", opacity:1, offset:.12},
+    {transform:"rotate(132deg)", offset:.45, easing:"cubic-bezier(.6,0,.9,.6)"},
+    {transform:"rotate(-20deg)", offset:.654, easing:"cubic-bezier(.2,.6,.4,1)"},
+    {transform:"rotate(-115deg)", opacity:1, offset:.85},
+    {transform:"rotate(-130deg)", opacity:0}
+  ], {duration:1300, fill:"forwards"});
+
+  /* ----- 2. Ball is bowled, bounces, is struck and flies at the screen ----- */
   ball.animate([
-    {transform:"translate(0,0) scale(.35) rotate(0deg)"},
-    {transform:`translate(${peekX}px,${peekY}px) scale(.9) rotate(-200deg)`}
-  ], {duration:650, delay:500, easing:"cubic-bezier(.2,.7,.3,1)", fill:"both"}).finished.then(() => {
-    /* Phase 2: come to the front and fly at the viewer */
-    ball.style.zIndex = 20;
-    /* Measure now, after fonts and layout have settled */
-    const r = ball.getBoundingClientRect();
-    const dx = innerWidth/2 - (r.left + r.width/2) + peekX, dy = innerHeight/2 - (r.top + r.height/2) + peekY;
-    const cover = Math.hypot(innerWidth, innerHeight) / ball.offsetWidth * 1.15;
-    const fly = ball.animate([
-      {transform:`translate(${peekX}px,${peekY}px) scale(.9) rotate(-200deg)`, opacity:1, easing:"cubic-bezier(.55,0,.9,.6)"},
-      {transform:`translate(${dx}px,${dy}px) scale(${cover}) rotate(-560deg)`, opacity:1, offset:.75, easing:"ease-out"},
-      {transform:`translate(${dx}px,${dy}px) scale(${cover*1.08}) rotate(-580deg)`, opacity:0}
-    ], {duration:1300, fill:"forwards"});
-    fly.finished.then(() => ball.remove());
+    {transform: place({x: W + 0.08*S, y: contact.y - 0.3*S}, 1, 0), easing:"cubic-bezier(.4,0,1,1)"},
+    {transform: place({x: contact.x + 0.42*S, y: contact.y + 0.1*S}, 1, 400), offset:.348, easing:"cubic-bezier(0,0,.6,1)"},
+    {transform: place(contact, 1, 700), offset:.609, easing:"cubic-bezier(.55,0,1,1)"},
+    {transform: place(impact, 5, 1300)}
+  ], {duration:1150, delay:150, fill:"both"});
+
+  at(850, () => {
+    const b = 2.4 * d;
+    Object.assign(burst.style, {width:b+"px", height:b+"px", left:(contact.x - b/2)+"px", top:(contact.y - b/2)+"px"});
+    burst.animate([{transform:"scale(.3)", opacity:1},{transform:"scale(1.8)", opacity:0}], {duration:260, easing:"ease-out"});
+  });
+
+  /* ----- 3. Build the cracked glass: rays from the impact point, crossed by jagged rings ----- */
+  const N = 13, off = rand(0, Math.PI * 2);
+  const rays = Array.from({length:N}, (_, i) => off + (i + rand(-.35, .35)) * Math.PI * 2 / N);
+  const radii = [0, .07*S, .2*S, .42*S, .75*S, Math.hypot(W, H) * 1.1];
+  const pts = radii.map((r, k) => rays.map(a => {
+    if (k === 0) return [impact.x, impact.y];
+    const rr = k === radii.length - 1 ? r : r * rand(.7, 1.3), aa = a + rand(-.12, .12);
+    return [impact.x + Math.cos(aa) * rr, impact.y + Math.sin(aa) * rr];
+  }));
+  const shards = [];
+  for (let k = 0; k < radii.length - 1; k++) {
+    for (let i = 0; i < N; i++) {
+      const j = (i + 1) % N;
+      const poly = k === 0 ? [pts[0][i], pts[1][i], pts[1][j]] : [pts[k][i], pts[k+1][i], pts[k+1][j], pts[k][j]];
+      const points = poly.map(p => p.map(n => n.toFixed(1)).join(",")).join(" ");
+      const g = document.createElementNS(NS, "g");
+      g.setAttribute("class", "shard");
+      g.innerHTML = `<polygon class="base" points="${points}" fill="url(#introGlassBg)" fill-opacity="0"/>
+        <polygon points="${points}" fill="#fff" fill-opacity="${rand(.01, .06).toFixed(3)}"/>
+        <polygon points="${points}" fill="none" stroke="rgba(230,240,255,.18)" stroke-width="1" stroke-linejoin="round"/>`;
+      g.style.opacity = 0;
+      glass.appendChild(g);
+      shards.push({g, k, poly});
+    }
+  }
+  /* Crack lines: strong radial cracks, with fainter and broken rings further out */
+  const cracks = document.createElementNS(NS, "g");
+  cracks.setAttribute("fill", "none");
+  cracks.setAttribute("stroke-linecap", "round");
+  const line = (a, b, width, alpha, delay) => {
+    const l = document.createElementNS(NS, "path");
+    l.setAttribute("d", `M${a[0].toFixed(1)} ${a[1].toFixed(1)}L${b[0].toFixed(1)} ${b[1].toFixed(1)}`);
+    l.setAttribute("stroke", `rgba(235,242,255,${alpha})`);
+    l.setAttribute("stroke-width", width);
+    l.style.opacity = 0;
+    l.dataset.delay = delay;
+    cracks.appendChild(l);
+  };
+  for (let i = 0; i < N; i++) {
+    for (let k = 0; k < radii.length - 1; k++) line(pts[k][i], pts[k+1][i], Math.max(.8, 2.2 - k * .4), .85 - k * .08, k * 45);
+  }
+  for (let k = 1; k < radii.length - 1; k++) {
+    for (let i = 0; i < N; i++) {
+      if (k >= 3 && Math.random() < .55) continue;
+      line(pts[k][i], pts[k][(i + 1) % N], k === 1 ? 1.8 : 1, k === 1 ? .8 : .55 - k * .08, k * 45 + 20);
+    }
+  }
+  glass.appendChild(cracks);
+  const glow = document.createElementNS(NS, "circle");
+  Object.entries({cx:impact.x, cy:impact.y, r:.09*S, fill:"#fff"}).forEach(([a, v]) => glow.setAttribute(a, v));
+  glow.style.opacity = 0;
+  glass.appendChild(glow);
+
+  /* ----- 4. Impact: flash, shake, cracks spread out from the ball ----- */
+  at(1300, () => {
+    glass.style.visibility = "visible";
+    flash.animate([{opacity:0},{opacity:.55, offset:.2},{opacity:0}], {duration:220, easing:"ease-out"});
+    const shake = [0,1,2,3,4,5].map(n => ({transform:`translate(${n === 5 ? 0 : rand(-9, 9)}px,${n === 5 ? 0 : rand(-9, 9)}px)`}));
+    stage.animate(shake, {duration:280});
+    glass.animate(shake, {duration:280});
+    shards.forEach(s => s.g.animate([{opacity:0},{opacity:1}], {duration:90, delay:s.k * 45, fill:"forwards"}));
+    cracks.querySelectorAll("path").forEach(l => l.animate([{opacity:0},{opacity:1}], {duration:90, delay:+l.dataset.delay, fill:"forwards"}));
+    glow.animate([{opacity:.6},{opacity:.12}], {duration:500, easing:"ease-out", fill:"forwards"});
+    /* The ball bounces back off the glass */
+    ball.animate([
+      {transform: place(impact, 5, 1300), opacity:1},
+      {transform: place({x: impact.x + 0.05*S, y: impact.y + 0.08*S}, 2.2, 1500), opacity:0}
+    ], {duration:380, easing:"ease-out", fill:"forwards"});
+  });
+
+  /* ----- 5. The glass falls away to reveal the homepage ----- */
+  at(1950, () => {
+    shards.forEach(s => s.g.querySelector(".base").setAttribute("fill-opacity", 1));
+    stage.remove();
+    intro.querySelector(".skip").remove();
+    intro.style.background = "transparent";
+    intro.style.pointerEvents = "none";
+    root.classList.remove("intro-hold");
+    glow.animate([{opacity:.12},{opacity:0}], {duration:200, fill:"forwards"});
+    cracks.animate([{opacity:1},{opacity:0}], {duration:150, fill:"forwards"});
+    shards.forEach(s => s.g.lastElementChild.setAttribute("stroke", "rgba(230,240,255,.45)"));
+    let last = 0;
+    shards.forEach(({g, k, poly}) => {
+      const cx = poly.reduce((a, p) => a + p[0], 0) / poly.length, cy = poly.reduce((a, p) => a + p[1], 0) / poly.length;
+      const len = Math.hypot(cx - impact.x, cy - impact.y) || 1;
+      const vx = (cx - impact.x) / len, vy = (cy - impact.y) / len, push = rand(20, 60);
+      const top = Math.max(0, Math.min(...poly.map(p => p[1])));
+      const rot = rand(-35, 35) * (k >= 4 ? .4 : 1);
+      const delay = rand(0, 220) + (k <= 1 ? 0 : 60), duration = rand(900, 1400);
+      last = Math.max(last, delay + duration);
+      g.animate([
+        {transform:"translate(0,0) rotate(0deg)", easing:"ease-out"},
+        {transform:`translate(${vx*push*.3}px,${vy*push*.3}px) rotate(${rot*.1}deg)`, offset:.12, easing:"cubic-bezier(.55,0,.85,.4)"},
+        {transform:`translate(${vx*push}px,${H - top + 80}px) rotate(${rot}deg)`}
+      ], {duration, delay, fill:"forwards"});
+    });
+    at(last + 60, end);
   });
 })();
 

@@ -14,6 +14,7 @@ Static single-page site for a Last Man Stands cricket team. No framework, no bui
 - Black background with an animated lightning canvas behind everything.
 - Club colours: teal #57b0a1 and gold #fcc125.
 - Homepage: four white, bold, underlined sans-serif links above the centred badge. No coloured buttons.
+- Opening intro (homepage only): a cricket bat hits a white cricket ball (straight seam, not a baseball) at the screen, the screen cracks and the glass falls away to reveal the homepage. It plays even with reduced motion set, and a tap or key press skips it. Built with the Web Animations API, not CSS animations, so the reduced-motion CSS rule does not stop it.
 - Page headings are white, in the same bold sans font as the player names.
 - Squad cards show first name, bold surname, and an optional gold role label. Batting and bowling styles are deliberately not shown.
 - Do not use player photos, logos or other images taken from the Last Man Stands website. Their terms do not allow reproduction.
