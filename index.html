@@ -191,23 +191,9 @@ footer{position:relative;z-index:2;text-align:center;color:var(--muted);font-siz
 }
 @media (min-width:761px){
   /* Desktop: extra bottom padding raises the centred badge and tagline by 20px */
-  /* Desktop: the buttons are stumps, three down each side of the badge, with bails on top */
-  #home.active{display:grid;grid-template-columns:auto auto auto;grid-template-areas:"left badge right" "tag tag tag";
-    justify-content:center;align-content:center;column-gap:clamp(1.5rem,4vw,3.5rem);row-gap:1.75rem;
-    padding:2.5rem 1.25rem calc(6vh + 40px)}
-  #home .menu{display:contents}
-  #home .stumps{display:none}
-  #home .menu-side{position:relative;display:flex;gap:12px;align-self:center;height:min(420px,56vh)}
-  #home .menu-side:first-child{grid-area:left}
-  #home .menu-side:last-child{grid-area:right}
-  #home .menu-side::before{content:"";position:absolute;left:-5px;right:-5px;top:-14px;height:9px;border-radius:5px;
-    background:linear-gradient(to right,var(--gold) 0 49%,transparent 49% 51%,var(--gold) 51%);
-    box-shadow:0 2px 6px rgba(0,0,0,.5);animation:rise .7s .3s cubic-bezier(.2,.8,.2,1) both}
-  #home .menu a{writing-mode:vertical-rl;width:58px;height:100%;min-height:0;padding:46px 0 18px;
-    background:linear-gradient(to bottom,#fff 0 20px,var(--teal) 20px 32px,#fff 32px);
-    box-shadow:0 12px 22px rgba(0,0,0,.55);font-size:1.15rem;letter-spacing:.06em}
-  #home .badge-wrap{grid-area:badge;margin:0;width:min(520px,calc(100vw - 500px),62vh)}
-  #home .tagline{grid-area:tag;text-align:center;margin:0}
+  #home.active{padding-bottom:calc(6vh + 40px)}
+  /* Keep the badge clear of the taller stumps menu on shorter screens */
+  .badge-wrap{width:min(560px,82vw,58vh,calc(100vh - 350px))}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
