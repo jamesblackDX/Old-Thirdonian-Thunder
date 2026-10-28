@@ -13,9 +13,9 @@ Static single-page site for a Last Man Stands cricket team. No framework, no bui
 
 - Black background with an animated lightning canvas behind everything.
 - Club colours: teal #57b0a1 and gold #fcc125.
-- Homepage: six buttons above the badge, as white boxes with dark bold sans-serif text and 5px rounded corners. No other colours for these buttons.
-- Desktop menu: a set of cricket stumps (white, teal bands, gold bails) in the centre, with Meet the Squad, Podcasts and Fixtures & Results stacked on the left, and Standings, Roll of Honour and Club Shop on the right.
-- Badge position: nudged right on all screen sizes so the shield's top point lines up with the centre of the buttons. On desktop it is centred in the space below the buttons, raised 20px.
+- Homepage: six buttons, as white boxes with dark bold sans-serif text and 5px rounded corners. No other colours for these buttons.
+- Desktop menu (761px and wider): the buttons are drawn as stumps (tall white boxes with a teal band, text running down them), in two sets of three with gold bails on top. Meet the Squad, Podcasts and Fixtures & Results stand to the left of the badge; Standings, Roll of Honour and Club Shop to the right. The tagline sits below.
+- Badge position: nudged right on all screen sizes so the shield's top point lines up with the centre of the buttons. On desktop the stumps and badge are centred in the screen, raised 20px.
 - Mobile homepage (760px and narrower): no stumps; the buttons are two per row, with the badge sitting just below them rather than centred.
 - Opening intro (homepage only, once per visit via sessionStorage): a cricket bat hits a white cricket ball (straight seam, not a baseball) at the screen, the screen cracks and the glass falls away to reveal the homepage. It plays even with reduced motion set, and a tap or key press skips it. Built with the Web Animations API, not CSS animations, so the reduced-motion CSS rule does not stop it.
 - Page headings are white, in the same bold sans font as the player names.
