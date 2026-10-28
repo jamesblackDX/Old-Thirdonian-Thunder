@@ -172,8 +172,11 @@ footer{position:relative;z-index:2;text-align:center;color:var(--muted);font-siz
 }
 </style>
 <script>
-/* Show the opening intro only when the site opens on the homepage */
-if (!/^#(squad|podcasts|fixtures|standings)$/.test(location.hash)) {
+/* Show the opening intro once per visit, and only when the site opens on the homepage */
+var introSeen = false;
+try { introSeen = sessionStorage.getItem("ottIntroSeen") === "1"; } catch (e) {}
+if (!introSeen && !/^#(squad|podcasts|fixtures|standings)$/.test(location.hash)) {
+  try { sessionStorage.setItem("ottIntroSeen", "1"); } catch (e) {}
   document.documentElement.classList.add("intro", "intro-hold");
   /* Safety net: never leave the intro covering the page */
   setTimeout(function(){ var d = document.documentElement, i = document.getElementById("intro"); d.classList.remove("intro", "intro-hold"); if (i) i.remove(); }, 9000);
