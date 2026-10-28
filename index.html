@@ -162,7 +162,15 @@ html.intro #intro{display:block}
 footer{position:relative;z-index:2;text-align:center;color:var(--muted);font-size:.85rem;padding:1.5rem 1rem 2rem}
 
 @media (max-width:760px){
-  .menu{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .menu{grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem}
+  /* Mobile homepage: white boxed buttons, with the badge sitting just below them */
+  .menu a{background:#fff;color:#0a0b0d;border-radius:5px;text-decoration:none;min-height:52px;padding:.6rem .75rem;
+    font-size:1.05rem;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+  .menu a:hover{opacity:.9}
+  .menu a:focus-visible{outline-offset:3px;border-radius:5px}
+  #home.active{gap:1.25rem}
+  #home .badge-wrap{margin-top:.5rem}
+  .tagline{text-align:center;line-height:1.8}
   .topbar nav{display:none}
   .ep{grid-template-columns:auto 1fr}
   .ep .len{grid-column:2}
