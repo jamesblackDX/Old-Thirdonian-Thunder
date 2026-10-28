@@ -14,8 +14,8 @@ Static single-page site for a Last Man Stands cricket team. No framework, no bui
 - Black background with an animated lightning canvas behind everything.
 - Club colours: teal #57b0a1 and gold #fcc125.
 - Homepage: four buttons above the badge, as white boxes with dark bold sans-serif text and 5px rounded corners. No other colours for these buttons.
-- Desktop homepage: the badge is centred in the space below the buttons, raised 20px.
-- Mobile homepage (760px and narrower): the buttons are two per row, with the badge sitting just below them rather than centred, and nudged right so the shield's top point lines up with the centre of the buttons.
+- Badge position: nudged right on all screen sizes so the shield's top point lines up with the centre of the buttons. On desktop it is centred in the space below the buttons, raised 20px.
+- Mobile homepage (760px and narrower): the buttons are two per row, with the badge sitting just below them rather than centred.
 - Opening intro (homepage only, once per visit via sessionStorage): a cricket bat hits a white cricket ball (straight seam, not a baseball) at the screen, the screen cracks and the glass falls away to reveal the homepage. It plays even with reduced motion set, and a tap or key press skips it. Built with the Web Animations API, not CSS animations, so the reduced-motion CSS rule does not stop it.
 - Page headings are white, in the same bold sans font as the player names.
 - Squad cards show first name, bold surname, and an optional gold role label. Batting and bowling styles are deliberately not shown.

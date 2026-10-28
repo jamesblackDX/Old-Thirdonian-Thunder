@@ -50,7 +50,8 @@ main{position:relative;z-index:2}
 .view{display:none;min-height:100vh;min-height:100dvh}
 .view.active{display:block}
 #home.active{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:1.25rem 1.25rem 6vh;gap:clamp(1.25rem,3vh,2.5rem)}
-#home .badge-wrap{margin-top:auto}
+/* The shield's top point sits at 47.2% across the image, so nudge it right to line up with the centre of the buttons */
+#home .badge-wrap{margin-top:auto;translate:2.8% 0}
 #home .tagline{margin-bottom:auto}
 .badge-wrap{position:relative;width:min(560px,82vw,58vh);aspect-ratio:900/858}
 .badge-wrap::before{content:"";position:absolute;inset:8%;border-radius:50%;
@@ -166,8 +167,7 @@ footer{position:relative;z-index:2;text-align:center;color:var(--muted);font-siz
   /* Mobile homepage: larger buttons, with the badge sitting just below them */
   .menu a{min-height:52px;padding:.6rem .75rem;font-size:1.05rem}
   #home.active{gap:1.25rem}
-  /* The shield's top point sits at 47.2% across the image, so nudge it right to line up with the centre of the buttons */
-  #home .badge-wrap{margin-top:calc(.5rem + 10px);translate:2.8% 0}
+  #home .badge-wrap{margin-top:calc(.5rem + 10px)}
   .tagline{text-align:center;line-height:1.8}
   .topbar nav{display:none}
   .ep{grid-template-columns:auto 1fr}
