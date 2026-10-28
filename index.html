@@ -68,15 +68,15 @@ main{position:relative;z-index:2}
   position:relative;display:flex;align-items:center;justify-content:center;text-align:center;
   min-height:48px;padding:.6rem 1rem;
   font-family:var(--body);font-weight:700;font-size:clamp(1.1rem,1.8vw,1.35rem);letter-spacing:.02em;
-  color:#fff;background:none;
-  text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:6px;
+  color:#0a0b0d;background:#fff;border-radius:5px;text-decoration:none;
+  box-shadow:0 6px 18px rgba(0,0,0,.45);
   transition:opacity .15s;
   animation:rise .7s cubic-bezier(.2,.8,.2,1) both;
 }
 .menu a:nth-child(1){animation-delay:.35s}.menu a:nth-child(2){animation-delay:.45s}
 .menu a:nth-child(3){animation-delay:.55s}.menu a:nth-child(4){animation-delay:.65s}
-.menu a:hover{opacity:.75}
-.menu a:focus-visible{outline:2px solid #fff;outline-offset:4px;border-radius:4px}
+.menu a:hover{opacity:.9}
+.menu a:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .tagline{font-family:var(--display);color:var(--muted);letter-spacing:.3em;font-size:.8rem;text-transform:uppercase;margin:0;animation:rise .7s .8s both}
 
 /* ---------- Inner pages ---------- */
@@ -163,11 +163,8 @@ footer{position:relative;z-index:2;text-align:center;color:var(--muted);font-siz
 
 @media (max-width:760px){
   .menu{grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem}
-  /* Mobile homepage: white boxed buttons, with the badge sitting just below them */
-  .menu a{background:#fff;color:#0a0b0d;border-radius:5px;text-decoration:none;min-height:52px;padding:.6rem .75rem;
-    font-size:1.05rem;box-shadow:0 6px 18px rgba(0,0,0,.45)}
-  .menu a:hover{opacity:.9}
-  .menu a:focus-visible{outline-offset:3px;border-radius:5px}
+  /* Mobile homepage: larger buttons, with the badge sitting just below them */
+  .menu a{min-height:52px;padding:.6rem .75rem;font-size:1.05rem}
   #home.active{gap:1.25rem}
   /* The shield's top point sits at 47.2% across the image, so nudge it right to line up with the centre of the buttons */
   #home .badge-wrap{margin-top:calc(.5rem + 10px);translate:2.8% 0}
@@ -175,6 +172,10 @@ footer{position:relative;z-index:2;text-align:center;color:var(--muted);font-siz
   .topbar nav{display:none}
   .ep{grid-template-columns:auto 1fr}
   .ep .len{grid-column:2}
+}
+@media (min-width:761px){
+  /* Desktop: extra bottom padding raises the centred badge and tagline by 20px */
+  #home.active{padding-bottom:calc(6vh + 40px)}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
