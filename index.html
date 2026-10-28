@@ -169,7 +169,8 @@ footer{position:relative;z-index:2;text-align:center;color:var(--muted);font-siz
   .menu a:hover{opacity:.9}
   .menu a:focus-visible{outline-offset:3px;border-radius:5px}
   #home.active{gap:1.25rem}
-  #home .badge-wrap{margin-top:calc(.5rem + 10px)}
+  /* The shield's top point sits at 47.2% across the image, so nudge it right to line up with the centre of the buttons */
+  #home .badge-wrap{margin-top:calc(.5rem + 10px);translate:2.8% 0}
   .tagline{text-align:center;line-height:1.8}
   .topbar nav{display:none}
   .ep{grid-template-columns:auto 1fr}
